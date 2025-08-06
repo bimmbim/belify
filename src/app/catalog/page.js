@@ -2,7 +2,7 @@
 
 import { useCart } from "@/app/context/CartContext";
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const SimpleProductCard = ({ product, onAddToCart }) => {
@@ -36,7 +36,8 @@ const products = [
   { id: 4, name: "Laptop Gacor Pisan", price: "Rp1.000.000", image: "/laptop.jpg" },
 ];
 
-export default function CatalogPage() {
+// ⬇️ Komponen client yang pakai useSearchParams
+function CatalogClientContent() {
   const { addToCart } = useCart();
   const searchParams = useSearchParams();
   const query = searchParams.get("query")?.toLowerCase() || "";
@@ -55,12 +56,12 @@ export default function CatalogPage() {
           <AnimatePresence>
             {filteredProducts.map((product) => (
               <motion.div
-  key={product.id}
-  initial={{ opacity: 0, scale: 0.95 }}
-  animate={{ opacity: 1, scale: 1 }}
-  exit={{ opacity: 0, scale: 0.95 }}
-  transition={{ duration: 0.35, ease: "easeInOut" }}
->
+                key={product.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+              >
                 <SimpleProductCard
                   product={product}
                   onAddToCart={addToCart}
@@ -71,5 +72,14 @@ export default function CatalogPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// ⬇️ Bungkus dengan Suspense
+export default function CatalogPage() {
+  return (
+    <Suspense fallback={<div>Memuat...</div>}>
+      <CatalogClientContent />
+    </Suspense>
   );
 }

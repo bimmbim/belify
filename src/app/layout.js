@@ -4,7 +4,6 @@ import { CartProvider } from "@/app/context/CartContext.jsx";
 import CartPopover from "@/components/CartPopover";
 import BelifyText from "@/components/BelifyButton";
 import Search from "@/components/Search";
-import { Suspense } from "react";
 
 export const metadata = {
   title: "BeliFy.",
@@ -38,9 +37,7 @@ export default function RootLayout({ children }) {
                   Profile
                 </Link>
 
-                <Suspense fallback={<div>Loading...</div>}>
                 <Search />
-                </Suspense>
                 <CartPopover />
               </div>
             </div>
